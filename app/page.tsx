@@ -61,7 +61,7 @@ export default function GzoxSurvey() {
       setIsSubmitting(false);
     }
   };
-  const StarRating = ({ label, value, onChange }) => (
+  const StarRating = ({ label, value, onChange }: { label: string; value: number; onChange: (val: number) => void }) => (
     <div className="mb-6">
       <label className="block text-gray-700 font-semibold mb-3">{label}</label>
       <div className="flex gap-2 justify-center">
@@ -120,7 +120,7 @@ export default function GzoxSurvey() {
                 value={formData.store}
                 onChange={(e) => setFormData({ ...formData, store: e.target.value })}
                 className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition"
- 
+
               >
                 <option value="">Escolha a loja...</option>
                 <option value="Barra Blue">Barra Blue</option>
