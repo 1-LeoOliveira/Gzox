@@ -181,7 +181,7 @@ export default function GzoxSurvey() {
                 onChange={(e) => setFormData({ ...formData, plate: e.target.value.toUpperCase() })}
                 className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition uppercase"
                 placeholder="ABC-1234"
-                maxLength="8"
+                maxLength={8}
               />
             </div>
             {/* Avaliação do Atendimento */}
