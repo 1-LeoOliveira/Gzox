@@ -1,6 +1,7 @@
 'use client'
 import React, { useState } from 'react';
 import { Star, Send } from 'lucide-react';
+
 export default function GzoxSurvey() {
   const [formData, setFormData] = useState({
     store: '',
@@ -13,6 +14,7 @@ export default function GzoxSurvey() {
   });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
+
   const handleSubmit = async () => {
     if (!formData.store || !formData.name.trim() || !formData.phone.trim() || !formData.email.trim() || !formData.plate.trim()) {
       alert('Por favor, preencha todos os campos obrigatórios');
@@ -24,25 +26,34 @@ export default function GzoxSurvey() {
     }
     setIsSubmitting(true);
     try {
-      // Substitua pela URL do seu Google Apps Script
-      const SCRIPT_URL = 'SUA_URL_DO_GOOGLE_APPS_SCRIPT_AQUI';
-      const response = await fetch(SCRIPT_URL, {
+      const SCRIPT_URL = 'https://script.google.com/macros/s/AKfycbxinsLcVumXrKtFI4qts0rudse8K6akYr-on0zRWAtVh-Bw6I9g_ibJEFd1YV4JwWHI/exec';
+      
+      const payload = {
+        store: formData.store,
+        name: formData.name,
+        phone: formData.phone,
+        email: formData.email,
+        plate: formData.plate,
+        serviceRating: formData.serviceRating,
+        recommendationRating: formData.recommendationRating,
+        timestamp: new Date().toLocaleString('pt-BR')
+      };
+
+      console.log('📤 Enviando dados:', payload);
+
+      // Usando no-cors para evitar erro de CORS
+      await fetch(SCRIPT_URL, {
         method: 'POST',
         mode: 'no-cors',
         headers: {
           'Content-Type': 'application/json',
         },
-        body: JSON.stringify({
-          store: formData.store,
-          name: formData.name,
-          phone: formData.phone,
-          email: formData.email,
-          plate: formData.plate,
-          serviceRating: formData.serviceRating,
-          recommendationRating: formData.recommendationRating,
-          timestamp: new Date().toLocaleString('pt-BR')
-        })
+        body: JSON.stringify(payload)
       });
+
+      // Com no-cors não conseguimos ler a resposta, mas os dados são enviados
+      console.log('✅ Dados enviados! Verifique a planilha.');
+
       setSubmitted(true);
       setFormData({
         store: '',
@@ -54,13 +65,15 @@ export default function GzoxSurvey() {
         recommendationRating: 0
       });
       setTimeout(() => setSubmitted(false), 5000);
+
     } catch (error) {
-      console.error('Erro ao enviar:', error);
+      console.error('❌ Erro ao enviar:', error);
       alert('Erro ao enviar pesquisa. Por favor, tente novamente.');
     } finally {
       setIsSubmitting(false);
     }
   };
+
   const StarRating = ({ label, value, onChange }: { label: string; value: number; onChange: (val: number) => void }) => (
     <div className="mb-6">
       <label className="block text-gray-700 font-semibold mb-3">{label}</label>
@@ -88,6 +101,7 @@ export default function GzoxSurvey() {
       </div>
     </div>
   );
+
   return (
     <div className="min-h-screen bg-gradient-to-br from-orange-500 to-orange-400 py-8 px-4">
       <div className="max-w-2xl mx-auto">
@@ -120,7 +134,6 @@ export default function GzoxSurvey() {
                 value={formData.store}
                 onChange={(e) => setFormData({ ...formData, store: e.target.value })}
                 className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition"
-
               >
                 <option value="">Escolha a loja...</option>
                 <option value="Barra Blue">Barra Blue</option>
@@ -130,7 +143,7 @@ export default function GzoxSurvey() {
             {/* Nome */}
             <div>
               <label className="block text-gray-700 font-semibold mb-2">
-                Nome Completo *
+                Nome  *
               </label>
               <input
                 type="text"
