@@ -1,6 +1,6 @@
 'use client'
 import React, { useState } from 'react';
-import { Star, Send, X } from 'lucide-react';
+import { Star, Send, X, MessageSquare } from 'lucide-react';
 
 export default function GzoxSurvey() {
   const [formData, setFormData] = useState({
@@ -10,7 +10,8 @@ export default function GzoxSurvey() {
     email: '',
     plate: '',
     serviceRating: 0,
-    recommendationRating: 0
+    recommendationRating: 0,
+    comment: ''
   });
   const [submitted, setSubmitted] = useState(false);
   const [isSubmitting, setIsSubmitting] = useState(false);
@@ -37,6 +38,7 @@ export default function GzoxSurvey() {
         plate: formData.plate,
         serviceRating: formData.serviceRating,
         recommendationRating: formData.recommendationRating,
+        comment: formData.comment || 'Sem comentário',
         timestamp: new Date().toLocaleString('pt-BR')
       };
 
@@ -64,7 +66,8 @@ export default function GzoxSurvey() {
         email: '',
         plate: '',
         serviceRating: 0,
-        recommendationRating: 0
+        recommendationRating: 0,
+        comment: ''
       });
 
     } catch (error) {
@@ -240,6 +243,29 @@ export default function GzoxSurvey() {
                 value={formData.recommendationRating}
                 onChange={(val) => setFormData({ ...formData, recommendationRating: val })}
               />
+              {/* Campo de Comentário */}
+              <div>
+                <label className="block text-gray-700 font-semibold mb-2 flex items-center gap-2">
+                  <MessageSquare size={18} />
+                  Comentário (Opcional)
+                </label>
+                <textarea
+                  value={formData.comment}
+                  onChange={(e) => {
+                    const text = e.target.value.slice(0, 100);
+                    setFormData({ ...formData, comment: text });
+                  }}
+                  className="w-full px-4 py-3 text-black border border-gray-300 rounded-lg focus:ring-2 focus:ring-orange-500 focus:border-transparent outline-none transition resize-none"
+                  placeholder="Deixe seu comentário aqui (máximo 100 caracteres)"
+                  rows={3}
+                  maxLength={100}
+                />
+                <div className="text-right mt-1">
+                  <span className={`text-sm ${formData.comment.length >= 100 ? 'text-red-500 font-semibold' : 'text-gray-500'}`}>
+                    {formData.comment.length}/100 caracteres
+                  </span>
+                </div>
+              </div>
               {/* Submit Button */}
               <button
                 onClick={handleSubmit}
